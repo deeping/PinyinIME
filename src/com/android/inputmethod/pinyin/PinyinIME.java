@@ -1262,17 +1262,28 @@ public class PinyinIME extends InputMethodService {
         public void run() {
             mCandidatesContainer.getLocationInWindow(mParentLocation);
 
-            if (!mFloatingWindow.isShowing()) {
-                mFloatingWindow.showAtLocation(mCandidatesContainer,
-                        Gravity.LEFT | Gravity.TOP, mParentLocation[0],
-                        mParentLocation[1] -mFloatingWindow.getHeight());
-            } else {
-                mFloatingWindow
-                .update(mParentLocation[0],
-                        mParentLocation[1] - mFloatingWindow.getHeight(),
-                        mFloatingWindow.getWidth(),
-                        mFloatingWindow.getHeight());
+            try {
+                if (!mFloatingWindow.isShowing()) {
+                    mFloatingWindow.showAtLocation(mCandidatesContainer,
+                            Gravity.LEFT | Gravity.TOP, mParentLocation[0],
+                            mParentLocation[1] - mFloatingWindow.getHeight());
+                } else {
+                    mFloatingWindow
+                            .update(mParentLocation[0],
+                                    mParentLocation[1] - mFloatingWindow.getHeight(),
+                                    mFloatingWindow.getWidth(),
+                                    mFloatingWindow.getHeight());
+                }
+            } catch (WindowManager.BadTokenException e) {
+                // ignore
+                Log.w(TAG, "BadTokenException: " + e.getMessage());
+            } catch (RuntimeException e) {
+                // don't crash if something else bad happens, for example a
+                // failure loading resources because we are loading from an app
+                // on external storage that has been unmounted.
+                Log.w(TAG, "RuntimeException: " + e);
             }
+
         }
     }
 
