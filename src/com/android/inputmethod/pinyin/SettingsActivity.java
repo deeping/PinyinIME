@@ -68,6 +68,7 @@ public class SettingsActivity extends PreferenceActivity implements
         
         updateWidgets();
     }
+
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
