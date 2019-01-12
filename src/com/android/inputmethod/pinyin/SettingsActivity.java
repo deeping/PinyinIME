@@ -19,7 +19,9 @@ package com.android.inputmethod.pinyin;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -56,6 +58,12 @@ public class SettingsActivity extends PreferenceActivity implements
                 .findPreference(getString(R.string.setting_sound_key));
         mVibratePref = (CheckBoxPreference) prefSet
                 .findPreference(getString(R.string.setting_vibrate_key));
+
+        Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+        if (!vibrator.hasVibrator()) {
+            prefSet.removePreference(mVibratePref);
+        }
+
         mPredictionPref = (CheckBoxPreference) prefSet
                 .findPreference(getString(R.string.setting_prediction_key));
         
